@@ -1,7 +1,6 @@
-
-    import torch
-    import torch.nn as nn
-    import torch.nn.functional as F
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
 except ModuleNotFoundError:
     raise ModuleNotFoundError("PyTorch is not installed. Please install it using 'pip install torch'.")
 
@@ -16,7 +15,14 @@ sp = spm.SentencePieceProcessor(model_file='tokenizer.model')
 # Ensure dataset is downloaded locally
 dataset_path = "./data"
 os.makedirs(dataset_path, exist_ok=True)
-dataset = load_dataset("airesearch/scb_mt_enth_2020", "enth", cache_dir=dataset_path)
+
+def load_translation_dataset():
+    try:
+        return load_dataset("airesearch/scb_mt_enth_2020", "enth", cache_dir=dataset_path)
+    except Exception as e:
+        raise RuntimeError(f"Failed to load dataset: {str(e)}")
+
+dataset = load_translation_dataset()
 
 # Define Seq2Seq Model with Attention
 class AdditiveAttention(nn.Module):
