@@ -1,0 +1,5 @@
+torch
+torchvision
+sentencepiece
+datasets
+flask
