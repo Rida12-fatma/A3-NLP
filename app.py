@@ -1,4 +1,4 @@
-try:
+
     import torch
     import torch.nn as nn
     import torch.nn.functional as F
@@ -8,12 +8,15 @@ except ModuleNotFoundError:
 import sentencepiece as spm
 from datasets import load_dataset
 from flask import Flask, request, jsonify
+import os
 
 # Load SentencePiece tokenizer
 sp = spm.SentencePieceProcessor(model_file='tokenizer.model')
 
-# Load Dataset
-dataset = load_dataset("airesearch/scb_mt_enth_2020", "enth")
+# Ensure dataset is downloaded locally
+dataset_path = "./data"
+os.makedirs(dataset_path, exist_ok=True)
+dataset = load_dataset("airesearch/scb_mt_enth_2020", "enth", cache_dir=dataset_path)
 
 # Define Seq2Seq Model with Attention
 class AdditiveAttention(nn.Module):
